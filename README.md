@@ -11,7 +11,7 @@ by Andrew Brokos, he describes a simplified betting game which he calls "The Ace
 > Two players, Opal and Ivan, are dealt a single card from a ten-card deck consisting of one of each card from 5 to A. Each player antes 1 chip, and the game permits only a single, 1 chip bet. That is, Opal may either bet 1 chip or check. Facing a check, Ivan may bet 1 chip or check. There is no raising, so facing a bet, a player's only options are to call or fold. If the hand goes to showdown, the player with the highest card wins.
 
 I've attempted to compute the Nash equilibrium using [Competitive Gradient Descent](https://f-t-s.github.io/projects/cgd/) and have
-left a [jupyter notbook implementation](https://www.kaggle.com/code/bsigmon/a-to-5-betting-game/edit) on [Kaggle](https://www.kaggle.com/) showing the results of this attempt.  Overall, I don't think it performed well.
+left a [jupyter notbook implementation](https://www.kaggle.com/code/bsigmon/a-to-5-betting-game) on [Kaggle](https://www.kaggle.com/) showing the results of this attempt.  Overall, I don't think it performed well.
 
 ## Alternative approach
 From a starting point, pick a bunch (dozens, hundreds?) of points "nearby" and then do a min-max calculation to find a better solution.  That is, imagine a matrix with OPAL's strategies for columns and IVAN's strategies for rows, for each row, find the column with the maximal cost and then find the row with the minimal maximum.
