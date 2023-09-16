@@ -56,7 +56,6 @@ pub fn generate_candidate(seed: u64, ivan: Array<f32, Ix2>, opal: Array<f32, Ix2
     const LOOP_LIMIT: u16 = 126;
     const CANDIDATE_LIMIT: usize = 250;
 
-    let candidate_rms_factor: f32 = libm::sqrtf((CANDIDATE_LIMIT-1) as f32);
     let mut rng: ChaCha8Rng = ChaCha8Rng::seed_from_u64(seed);
     let mut ivan: Array<f32, Ix2> = ivan;
     let mut opal: Array<f32, Ix2> = opal;
@@ -101,11 +100,10 @@ pub fn generate_candidate(seed: u64, ivan: Array<f32, Ix2>, opal: Array<f32, Ix2
         }
 
         let cand = strategy_min_max(&o_candidates, &i_candidates);
-        let sd_ivan_update = delta_rms(&i_deltas[cand.min_max_indx_ivan]) / candidate_rms_factor;
-        let sd_opal_update = delta_rms(&o_deltas[cand.min_max_indx_opal]) / candidate_rms_factor;
+        let sd_ivan_update = delta_rms(&i_deltas[cand.min_max_indx_ivan]);
+        let sd_opal_update = delta_rms(&o_deltas[cand.min_max_indx_opal]);
         ivan_sd = exp_moving_av_5(ivan_sd, sd_ivan_update);
         opal_sd = exp_moving_av_5(opal_sd, sd_opal_update);
-
         ivan = &ivan + &i_deltas[cand.min_max_indx_ivan];
         opal = &opal + &o_deltas[cand.min_max_indx_opal];
         cost = cand.cost;
@@ -235,7 +233,8 @@ pub fn exp_moving_av_5(old: f32, update: f32) -> f32 {
 }
 
 pub fn delta_rms(delta: &Array<f32, Ix2>) -> f32 {
-    libm::sqrtf(delta.map(|x| { x * x }).sum())
+    let cnt =  delta.len() as f32;
+    libm::sqrtf(delta.map(|x| { x * x }).sum() / cnt)
 }
 
 #[cfg(test)]
